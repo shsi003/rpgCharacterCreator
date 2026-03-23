@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="index.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Character Creator</title>
+</head>
+<body>
+
+		<h1>Character Creator</h1>
+
+		<form action="">
+			<label for="nameInput">Name</label>
+			<input type="text" placeholder="Input name" id="nameInput">
+
+			<br>
+
+			<label for="classInput">Class</label>
+			<select name="" id="classInput">
+				<option value="">Select Class</option>
+				<option value="Mage">Mage</option>
+				<option value="Warrior">Warrior</option>
+				<option value="Thief">Thief</option>
+			</select>
+
+			<br>
+			
+			
+			<label for="raceInput">Race</label>
+			<select name="" id="raceInput">
+				<option value="">Select race</option>
+				<option value="Human">Human</option>
+				<option value="Elf">Elf</option>
+				<option value="Orc">Orc</option>
+				<!--To be added later
+				Dragonkin
+				Undead
+				RockDweller
+				-->
+			</select>
+
+			<br>
+		
+		
+			<button id="createCharacterBtn">Create Character</button>
+		</form>
+
+		<br>
+		<br>
+
+		<h2>Created Characters</h2>
+		<section id="createdCharactersSection">
+
+		</section>
+	
+
+	<script src="index.js"></script>
+</body>
+</html>
