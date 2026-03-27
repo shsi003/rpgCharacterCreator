@@ -85,6 +85,7 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 				return Object.assign({}, hero, {
 					abilty:'Spiritual glow: heightened stats for mana attacks and total mana',
 					Hp: 120,
+					mana: 150,
 
 
 				});
@@ -93,6 +94,9 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 			case "Warrior":	
 				return Object.assign({}, hero, {
+					ability: 'Iron heart: higher stats for physical attacks and total health',
+					Hp: 180,
+					mana: 60
 
 				});
 
@@ -101,6 +105,9 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 			case "thief":
 				return Object.assign({}, hero, {
+					ability: 'Swift: If met with a foe of the same or lower level, the thief always dodges the first strike',
+					Hp: 140,
+					mana: 75
 
 				});	
 
