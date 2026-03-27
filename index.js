@@ -80,7 +80,7 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 	//Function for adding beginner class Skills after characters are made
 	const addBeginnerClassSkills = (hero) => {
-		switch (hero.job) {
+		switch (hero.class) {
 			case "Mage":
 				return Object.assign({}, hero, {
 					ability:'Spiritual glow: heightened stats for mana attacks and total mana',
