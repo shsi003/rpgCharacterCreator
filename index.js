@@ -34,8 +34,8 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			}		
 	}
 
-	//Get a 'party' array from the localstorage or create a new array if not found
-	let party = JSON.parse(localStorage.getItem("rpgParty")) || [];
+	//Get the rawData for generated heroes from storage
+	const rawData = JSON.parse(localStorage.getItem("rpgParty")) || [];
 
 
 
@@ -45,16 +45,18 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 		
 
-		//Pushes hero object to party
-		party.push(hero);
+		//Pushes hero object to rawData
+		rawData.push(hero);
 
 		//Save to browser memory
-		localStorage.setItem("rpgParty", JSON.stringify(party));
+		localStorage.setItem("rpgParty", JSON.stringify(rawData));
 
 		//logs saved hero in the console
 		console.log(`Hero: ${hero.name}, ID: ${hero.id} tucked into storage`);
 
 	}
+
+	console.log(rawData);
 
 
 	//Function for deleting heroes, to be used in delete button
@@ -73,6 +75,53 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 
 	}
+
+
+
+	//Function for adding beginner class Skills after characters are made
+	const addBeginnerClassSkills = (hero) => {
+		switch (hero.job) {
+			case "Mage":
+				return Object.assign({}, hero, {
+					abilty:'Spiritual glow: heightened stats for mana attacks and total mana',
+					Hp: 120,
+
+
+				});
+				
+
+
+			case "Warrior":	
+				return Object.assign({}, hero, {
+
+				});
+
+
+
+
+			case "thief":
+				return Object.assign({}, hero, {
+
+				});	
+
+			default:
+				return hero;	
+		}
+	}
+
+
+
+
+
+
+	//Establish "party" section the bridge between rawData and renderParty, where class skills are applied
+	let party = rawData.map(hero => {
+
+		//section for adding beginner class skills
+		addBeginnerClassSkills(hero);
+
+		return hero;
+	})
 
 
 
