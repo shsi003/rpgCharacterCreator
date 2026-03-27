@@ -83,8 +83,8 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 		switch (hero.job) {
 			case "Mage":
 				return Object.assign({}, hero, {
-					abilty:'Spiritual glow: heightened stats for mana attacks and total mana',
-					Hp: 120,
+					ability:'Spiritual glow: heightened stats for mana attacks and total mana',
+					hp: 120,
 					mana: 150,
 
 
@@ -95,7 +95,7 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			case "Warrior":	
 				return Object.assign({}, hero, {
 					ability: 'Iron heart: higher stats for physical attacks and total health',
-					Hp: 180,
+					hp: 180,
 					mana: 60
 
 				});
@@ -103,10 +103,10 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 
 
-			case "thief":
+			case "Thief":
 				return Object.assign({}, hero, {
 					ability: 'Swift: If met with a foe of the same or lower level, the thief always dodges the first strike',
-					Hp: 140,
+					hp: 140,
 					mana: 75
 
 				});	
@@ -122,13 +122,7 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 
 	//Establish "party" section the bridge between rawData and renderParty, where class skills are applied
-	let party = rawData.map(hero => {
-
-		//section for adding beginner class skills
-		addBeginnerClassSkills(hero);
-
-		return hero;
-	})
+	let party = rawData.map(hero => addBeginnerClassSkills(hero));
 
 
 
@@ -149,6 +143,10 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			characterSheet.innerHTML = `
 			<h3>${hero.name}</h3>
 			<h3>race: ${hero.race} | class: ${hero.class}</h3>
+			<h3>Stats</h3>
+			<h4>Ability: ${hero.ability}</h4>
+			<h4>hp: ${hero.hp}</h4>
+			<h4>mana: ${hero.mana}</h4>
 			<button class="delete-btn">Delete Character</button>
 			`
 			;
