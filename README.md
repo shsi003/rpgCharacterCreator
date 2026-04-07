@@ -4,7 +4,7 @@
 
 A simple and fun browser-based RPG character creator with race and class selection, stat modifiers, and persistent storage.
 
-![Preview] (./assets/rpgCharacterCreator.png)
+![Preview] (assets/rpgCharacterCreator.png)
 
 
 ## Features
