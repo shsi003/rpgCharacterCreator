@@ -2,6 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //Today we will attempt to make an app that creates and stores rpg character sheets
 
+
+
+
+
+
+
 //Universal constants for character creator
 
 const nameInput = document.getElementById("nameInput");
@@ -12,6 +18,22 @@ const createCharacterBtn = document.getElementById("createCharacterBtn");
 
 const createdCharactersSection = document.getElementById("createdCharactersSection");
 
+
+
+
+
+	//Get the rawData for generated heroes from storage
+	let rawData = JSON.parse(localStorage.getItem("rpgParty")) || [];
+
+
+
+	//The 'showroom' where the chosen characters will be displayed
+	let displayArray = [];
+
+
+
+	
+	
 
 
 //reusable functions
@@ -26,16 +48,18 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 					
 					)
 
-			return{
+			return{						//Outputs character stats after user input
 				name: nameInput.value,
 				race: raceInput.value,
 				class: classInput.value,
-				id: Date.now() //assigns unique Id for fetching, storing and deleting
+				id: Date.now(), //assigns unique Id for fetching, storing and deleting
+				hp: 0,
+				mana: 0,
+				ability: '',
 			}		
 	}
 
-	//Get the rawData for generated heroes from storage
-	const rawData = JSON.parse(localStorage.getItem("rpgParty")) || [];
+
 
 
 
@@ -54,7 +78,14 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 		//logs saved hero in the console
 		console.log(`Hero: ${hero.name}, ID: ${hero.id} tucked into storage`);
 
+	
+
+
 	}
+
+	
+
+
 
 	console.log(rawData);
 
@@ -63,17 +94,68 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 	const removeHero = (idToDelete) => {
 			
 		//reset the party array to include everything EXCEPT the chosen hero
-		party = party.filter(hero => hero.id !== idToDelete);
-
+		rawData = rawData.filter(hero => hero.id !== idToDelete);
+		displayArray = displayArray.filter(hero => hero.id !== idToDelete);
 		
 		//Save the updated list
-		localStorage.setItem("rpgParty", JSON.stringify(party));
+		localStorage.setItem("rpgParty", JSON.stringify(rawData));
 
 
+	
 		//refresh screen
 		renderParty();
 
+	}
 
+
+
+
+
+	//function for adding race stats
+
+	const addRaceStats = (hero) => {
+		switch (hero.race) {
+			case "Human":
+				return Object.assign({}, hero, {
+					hp: (hero.hp || 0 )+ 40 ,
+					mana: (hero.mana || 0) + 30 ,
+					trait: '',
+				});
+
+
+			case "Elf":
+				return Object.assign({}, hero, {
+					hp: (hero.hp || 0) + 30 ,
+					mana: (hero.mana || 0) + 40 ,
+					trait: '',
+
+				});
+
+
+			
+			case "Orc":
+				return Object.assign({}, hero, {
+					hp: (hero.hp || 0) + 40 ,
+					mana: (hero.mana || 0) + 20 ,
+					trait: '',
+
+				});
+
+
+			case "Dwarf":
+				return Object.assign({}, hero, {
+					hp: (hero.hp || 0) + 50 ,
+					mana: (hero.mana || 0) + 20 ,
+					trait: '',
+
+				});
+
+
+
+
+			default:
+				return hero;
+		}
 	}
 
 
@@ -84,8 +166,8 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			case "Mage":
 				return Object.assign({}, hero, {
 					ability:'Spiritual glow: heightened stats for mana attacks and total mana',
-					hp: 120,
-					mana: 150,
+					hp: (hero.hp || 0) + 120,
+					mana: (hero.mana || 0) + 150,
 
 
 				});
@@ -95,8 +177,8 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			case "Warrior":	
 				return Object.assign({}, hero, {
 					ability: 'Iron heart: higher stats for physical attacks and total health',
-					hp: 180,
-					mana: 60
+					hp: (hero.hp || 0) + 180,
+					mana: (hero.mana || 0) +  60
 
 				});
 
@@ -106,8 +188,8 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			case "Thief":
 				return Object.assign({}, hero, {
 					ability: 'Swift: If met with a foe of the same or lower level, the thief always dodges the first strike',
-					hp: 140,
-					mana: 75
+					hp: (hero.hp || 0) + 140,
+					mana: (hero.mana || 0) +  75
 
 				});	
 
@@ -118,11 +200,29 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 
 
+	//hydrate and fill in hero data
+	const hydrateHero = (hero) => {
+		
+
+			//sets all hero stats to 0
+			const skeleton = {...hero, mana: 0, hp: 0};
+
+			//adds stats based on chosen class and race
+			return addBeginnerClassSkills(addRaceStats(skeleton));
+
+	}
+
+
+	//sending each hero through the processor
+	const hydrateAll = () => {
+		
+		displayArray = rawData.map(hero => hydrateHero(hero));
+	}
 
 
 
-	//Establish "party" section the bridge between rawData and renderParty, where class skills are applied
-	let party = rawData.map(hero => addBeginnerClassSkills(hero));
+
+
 
 
 
@@ -136,7 +236,7 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 
 		createdCharactersSection.innerHTML = "";
 
-		party.forEach(hero => {
+		displayArray.forEach(hero => {
 			const characterSheet = document.createElement('div');
 			characterSheet.className = "hero-card";
 
@@ -156,11 +256,11 @@ const createdCharactersSection = document.getElementById("createdCharactersSecti
 			const deleteBtn = characterSheet.querySelector(".delete-btn");
 			deleteBtn.addEventListener('click', () => {
 				removeHero(hero.id); //appends delete functionality to button
+				console.log(`hero: ${hero.name} id: ${hero.id} has been deleted!`) //Logs the delete
 			})
 
 		})
 	}
-
 
 
 
@@ -181,6 +281,10 @@ createCharacterBtn.addEventListener('click', (e) => {
 	
 	
 	saveHeroToStorage(newHero); //Passes logged info into storage
+
+
+	const hydratedNewHero = hydrateHero(newHero);
+	displayArray.push(hydratedNewHero);
 	renderParty(); //fetches hero from storage and displays them
 
 	
@@ -193,7 +297,10 @@ createCharacterBtn.addEventListener('click', (e) => {
 })
 
 
+//For intialization
+hydrateAll();
 renderParty();
+
 
 
 })
